@@ -1,0 +1,14 @@
+.login-card{
+    align-items: center;
+}
+
+.created-msg{
+    margin-top: 10px;
+    background-color: lightgreen;
+    text-align: center;
+    padding: 10px;
+}
+
+.created-msg-text{
+    font-weight: 600;
+}

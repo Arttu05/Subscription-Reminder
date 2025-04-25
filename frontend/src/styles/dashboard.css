@@ -1,0 +1,76 @@
+.dashboard-button{
+    border: transparent;
+    color: white;
+    font-weight: 600;
+    background-color: gold;
+    font-size: 1.2em;
+    border-radius: 10px;
+    padding: 5px 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    text-decoration: transparent                ;
+}
+
+.dashboard-button:hover{
+    filter: brightness(75%);
+}
+
+.dashboard-container{
+    text-align: center;
+}
+
+.subscription-list-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.subscription-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    /* border: 1px solid black; */
+    width: 80svw;
+    max-width: 400px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    height: min-content;
+}
+
+.subscription-card-title{
+    font-weight: 800;
+    font-size: 2em;
+    width: 100%;
+    background-color: gold;
+    color: white;
+    padding: 10px 0px;
+}
+
+.subscription-card-message{
+    width: 85%;
+}
+
+.subscription-card-after{
+    font-weight: 600;
+}
+
+.subscription-card-button-container{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: flex-end;
+    width: 95%;
+    padding: 5px;
+}
+
+
+@media screen and (min-width: 1000px) {
+    
+    .subscription-list-container{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+}

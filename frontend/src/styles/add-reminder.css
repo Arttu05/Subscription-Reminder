@@ -1,0 +1,17 @@
+.add-reminder-card{
+    text-align: center;
+    width: 80%;
+    max-width: 400px
+}
+
+.radio-button-container{
+    margin: 5px 0;
+}
+
+.last-radio-container{
+    margin-bottom: 20px;
+}
+
+.radio_button_label{
+    font-size: 1.2rem;
+}

@@ -1,0 +1,130 @@
+body, html, #root {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100svh;
+}
+
+header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #131313;
+    padding: 10px;
+}
+
+.header-left-side{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-icon{
+    height: 30px;
+}
+
+.header-site-name{
+    display: none;
+}
+
+.auth-container{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.auth-button{
+    color: white;
+    background-color: #131313 ;
+    border-radius: 20px;
+    padding: 5px 10px;
+    border: 3px solid white;
+    font-weight: 600;
+    opacity: 100%;
+    text-decoration: transparent;    
+}
+
+.auth-button:hover{
+    transition: opacity 250ms;
+    opacity: 50%;
+}
+
+.hide-button{
+    display: none;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* general form styles */
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: start;
+    padding: 10px;
+    gap: 10px;
+}
+
+form span{
+    font-size: 1.2em;
+    text-align: left;
+}
+
+form button{
+    background-color: gold;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+form button:disabled{
+    filter: grayscale(75%) !important; 
+}
+
+form button:hover{
+    filter:brightness(75%);
+}
+
+form input{
+    font-size: 1.2rem;
+}
+
+form textarea{
+    font-size: 1.2rem;
+    height: 7rem;
+}
+
+
+/* error message styles  */
+
+.error-message{
+    background-color: red;
+    padding: 10px;
+    border-radius: 5%;
+}
+
+.error-message-text{
+    font-weight: 600;
+    color: black;
+}
+
+
+
+@media screen and (min-width: 500px) {
+    
+    .header-site-name{
+        display: inline;
+        color: white;
+        font-weight: 600;
+    }
+
+}

@@ -1,0 +1,2 @@
+export const BACKEND_URL = "https://192.168.100.33:5001"
+export const PUBLIC_KEY = "BADEUHkPPkUo2w64_5VHrEMgJXINqEbasUYvGBnjVqTlVUuS_0_puSOqwi-SAu1Yq84NvOTciH7xTE8wW4Cw82Y"

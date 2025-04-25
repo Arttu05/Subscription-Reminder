@@ -1,0 +1,55 @@
+const express = require("express")
+const apiRouter = require("./router/apiRoute")
+const authRouter = require("./router/authRoute")
+require("dotenv").config()
+const bodyParser = require("body-parser")
+const { default: mongoose } = require("mongoose")
+const cors = require("cors")
+const { notificationHandler } = require("./notifications/notificationHandler")
+const https = require("https")
+const fs = require("fs")
+
+const port = process.env.PORT
+const notificationInterval = (1000 * 60 * 1) // 5 minutes
+const app =  express()
+
+app.use(cors());
+app.use(express.json())
+app.use(bodyParser.urlencoded({extended: true}))
+
+console.log(`Starting notification handler with ${notificationInterval} intervals`)
+setInterval(notificationHandler, notificationInterval)
+
+
+mongoose.connect(process.env.MONGO_URL).then(() =>{
+    console.log("connected to mongodb")
+})
+
+
+app.use("/api", apiRouter)
+app.use("/auth", authRouter)
+
+
+app.get("/", (req,res) => res.json("testi"))
+
+
+const httpsOptions = {
+    key: fs.readFileSync("../private.key"),
+    cert: fs.readFileSync("../certificate.crt")
+}
+
+
+https.createServer(httpsOptions, app).listen(port, () => {
+    console.log(`listening to port ${port}`)
+})
+
+
+
+/* app.listen(port,(err) => {
+    if(err){
+        console.log(err)
+    }
+    else{
+        console.log(`Listening port: ${port}`)
+    }
+}) */
