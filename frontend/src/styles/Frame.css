@@ -10,13 +10,13 @@ header{
     justify-content: space-between;
     align-items: center;
     background-color: #131313;
-    padding: 10px;
 }
 
 .header-left-side{
     display: flex;
     align-items: center;
     gap: 5px;
+    margin-left: 5px;
 }
 
 .header-icon{
@@ -31,23 +31,27 @@ header{
     display: flex;
     justify-content: space-evenly;
     flex-direction: row;
-    gap: 5px;
+    gap: 2px;
+    padding-top: 5px;
 }
 
 .auth-button{
     color: white;
     background-color: #131313 ;
-    border-radius: 20px;
-    padding: 5px 10px;
-    border: 3px solid white;
+    padding: 10px 25px;
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    border-left: none;
+    border-top: none;
     font-weight: 600;
+    font-size: 1.1rem;
     opacity: 100%;
     text-decoration: transparent;    
 }
 
 .auth-button:hover{
-    transition: opacity 250ms;
-    opacity: 50%;
+    transition: transform 250ms;
+    transform:translate(-3px,-3px);
 }
 
 .hide-button{
@@ -58,6 +62,44 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* General button */
+
+.btn{
+    border: transparent;
+    color: white;
+    font-weight: 600;
+    background-color: gold;
+    font-size: 1.2em;
+    border-radius: 10px;
+    padding: 5px 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    text-decoration: transparent
+}
+
+.btn:hover{
+    opacity: 80%;
+}
+
+.btn:active{
+    transition: 200ms scale;
+    scale: 1.05;
+}
+
+.btn:focus{
+    transition: 200ms scale;
+    scale: 1.05;
+}
+
+.btn:disabled{
+    scale: 1;
+    filter: brightness(80%);
+}
+
+
+.btn-delete{
+    background-color: red;
 }
 
 /* general form styles */

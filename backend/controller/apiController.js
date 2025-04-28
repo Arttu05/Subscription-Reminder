@@ -98,4 +98,52 @@ async function NotificationSub(req,res){
 
 }
 
-module.exports = { GetUserSubscriptions, AddNewReminder, NotificationSub}
+async function GetSubscriptionById(req, res){
+    const sub_id = req.params.id
+
+    const foundSubscription = await subscriptionModel.findById(sub_id)
+
+    if(foundSubscription == null){
+        res.status(400).json(false)
+        return
+    }
+
+    foundSubscription.title = 
+
+    res.status(200).json({subscription: foundSubscription}) 
+
+} 
+
+async function EditSubscription(req ,res){
+    const sub_id = req.params.id
+
+    const title = req.body.title
+    const message = req.body.message
+    const remind_date = req.body.remind_date
+    const delete_after = req.body.delete_after
+    const remind_again = req.body.remind_again
+    
+    const foundSub = await subscriptionModel.findById(sub_id)
+
+    if(title == undefined || message == undefined || remind_date == undefined || delete_after == undefined || remind_again == undefined ){
+        res.status(400).json(false)
+        return
+    }
+
+    if(foundSub == null){
+        res.status(400).json(false)
+        return
+    }
+
+    foundSub.title = title
+    foundSub.message = message
+    foundSub.remind_date = remind_date
+    foundSub.delete_after = delete_after
+    foundSub.remind_again = remind_again
+
+    await foundSub.save()
+
+    res.status(200).json(true)
+}
+
+module.exports = { GetUserSubscriptions, AddNewReminder, NotificationSub, GetSubscriptionById, EditSubscription}

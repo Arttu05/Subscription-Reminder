@@ -1,15 +1,15 @@
 import "../styles/login.css"
 import "../styles/loading-animation.css"
-import { useNavigate, useParams, useSearchParams } from "react-router-dom"
+import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useAuth } from "../context"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../const";
 
 export default function LoginCard(){
     
     const [searchParams] = useSearchParams()
-    const { setToken } = useAuth();  
+    const { setToken, token } = useAuth();  
     const navigate = useNavigate()
 
     const [username, setUsername] = useState()
@@ -21,6 +21,15 @@ export default function LoginCard(){
     const [waitingForResponse, setWaitingForResponse] = useState(false)
 
 
+    useEffect(() => {
+    
+        if(token){
+            navigate("/dashboard")
+        }
+
+        
+    },[]) 
+    
     function HandleSubmit(event){
         event.preventDefault()
 
@@ -80,13 +89,16 @@ export default function LoginCard(){
                 { waitingForResponse == false && 
                     <button type="submit" >Login</button>
                 }    
-                </form>
+            </form>
+
 
             {loginErr && 
                 <div className="error-message">
                     <span className="error-message-text">username or password incorrect</span>
                 </div>
             }
+            
+            <NavLink to={{pathname: "/register"}} >Don't have account, create one here!</NavLink>
 
         </div>
     )

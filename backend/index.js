@@ -10,11 +10,12 @@ const https = require("https")
 const fs = require("fs")
 
 const port = process.env.PORT
-const notificationInterval = (1000 * 60 * 1) // 5 minutes
+const notificationInterval = (1000 * 60 * 5) // 5 minutes
 const app =  express()
 
 app.use(cors());
 app.use(express.json())
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 
 console.log(`Starting notification handler with ${notificationInterval} intervals`)
@@ -30,7 +31,7 @@ app.use("/api", apiRouter)
 app.use("/auth", authRouter)
 
 
-app.get("/", (req,res) => res.json("testi"))
+app.get("/", (req,res) => res.redirect(process.env.FRONTEND_URL))
 
 
 const httpsOptions = {

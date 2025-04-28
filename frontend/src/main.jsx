@@ -1,12 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import FrameElem from './pageFrame.jsx'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter, useParams } from 'react-router-dom'
 import LoginCard from './pages/login.jsx'
 import RegisterCard from './pages/register.jsx'
 import {AuthProvider } from './context.jsx'
 import { DashboardElem } from './pages/dashboard.jsx'
 import { AddReminderElem } from './pages/addReminder.jsx'
+import { EditElem } from './pages/edit.jsx'
 
 const router = createBrowserRouter([
   {
@@ -15,7 +16,8 @@ const router = createBrowserRouter([
       {path: "/", element: <LoginCard/>},
       {path: "/register", element: <RegisterCard/>},
       {path: "/dashboard", element: <DashboardElem/>},
-      {path: "/add", element: <AddReminderElem/>}
+      {path: "/add", element: <AddReminderElem/>},
+      {path: "/edit/:id", element: <EditElem/>}
     ]
   }
 ])

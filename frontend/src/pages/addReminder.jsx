@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/add-reminder.css"
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
@@ -6,6 +6,7 @@ import axios from "axios";
 import { BACKEND_URL } from "../const";
 import { useAuth } from "../context";
 import { useNavigate } from "react-router-dom";
+import ArrowTo from "../arrowTo";
 
 export function AddReminderElem(){
 
@@ -21,6 +22,17 @@ export function AddReminderElem(){
     const [addErr, setAddErr] = useState(false)
 
     
+    useEffect(() => {
+
+        if(token){
+            return
+        }
+
+        navigate("/")
+        
+    },[]) 
+
+
     function DateCahnge(e){
         console.log(e.getTime()) //unix time
         setSelectedDate(e)
@@ -69,6 +81,7 @@ export function AddReminderElem(){
         <>
             <div className="add-reminder-card">
                 <h2>Add Reminder</h2>
+                <ArrowTo urlValue={"/dashboard"}/>
                 <form action="" onSubmit={SubmitEvent}>
                     <span>Title</span>
                     <input type="text" placeholder="the title for the notification" onChange={(e) => {setTitle(e.target.value)}} required/>

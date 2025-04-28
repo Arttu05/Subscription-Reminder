@@ -12,7 +12,7 @@ export function DashboardElem(){
     const {token, setToken} = useAuth()
 
     const [subscriptions, setSubscriptions] = useState([])
-
+    const [dataFetched, setDataFetched] = useState(false)
     function LogoutToRoot(){
         setToken()
         navigate("/")
@@ -26,6 +26,7 @@ export function DashboardElem(){
         .then((response) => {
             console.log(response.data)
             setSubscriptions(response.data)
+            setDataFetched(true)
             if(response.status == 401){
                 LogoutToRoot()
             }
@@ -41,22 +42,32 @@ export function DashboardElem(){
         <>
             <div className="dashboard-container">
                 <h1>Dashboard</h1>
-                <NavLink className='dashboard-button'  to={{pathname: "/add"}}>Add Reminder</NavLink>
+                <NavLink className='btn'  to={{pathname: "/add"}}>Add Reminder</NavLink>
                 <h2>My Subscriptions</h2>
                 <div className="subscription-list-container">
+                    
                     {subscriptions.length > 0 && 
+                        //data fetched 
                         subscriptions.map((subscription) => {
-                            return <SubscriptionCard subscription={subscription}/>
+                            return <SubscriptionCard key={subscription._id} subscription={subscription}/>
                         })
                     }
-                    {subscriptions.length === 0 &&
+
+                    {dataFetched == false &&
+                        //still fetching data 
                         <div class="loader-container">
                             <div class="loading-dot"></div>
                             <div class="loading-dot"></div>
                             <div class="loading-dot"></div>
                         </div>
                     }
+
+                    {(dataFetched && subscriptions.length < 1) && 
+                        //No subscriptions
+                        <span>No Subscriptions</span>
+                    }
                 </div>
+                <button className="btn btn-delete">Remove all reminders</button>
             </div>
         </>
     )
@@ -66,6 +77,9 @@ export function DashboardElem(){
 function SubscriptionCard({subscription}){
 
     const {token} = useAuth()
+
+    const [remindButtonText, setRemindButtonText] = useState("Remind")
+    const [remindAdded, setRemindAdded] = useState(false)
 
     // https://www.npmjs.com/package/web-push
     function urlBase64ToUint8Array(base64String) {
@@ -95,13 +109,16 @@ function SubscriptionCard({subscription}){
 
     }
 
-    async function RemindClick(){
+    async function RemindClick(event){
         //TODO subscripe to notification
         const push = await GetNotificationPush()
         console.log(push)
         axios({method: "post", url: `${BACKEND_URL}/api/notification`, data: {push: push, sub_id: subscription._id, remind_date: subscription.remind_date },  headers:{"Authorization": `Bearer ${token}` }})
         .then(res => {
-            console.log("done")
+            console.log(event)
+            
+            setRemindAdded(true)
+            setRemindButtonText("Remind Added")
         })
         .catch(err => {
             console.log(err)
@@ -128,11 +145,16 @@ function SubscriptionCard({subscription}){
                 }
 
             <div className="subscription-card-button-container">
-                <button className="dashboard-button">Edit</button>
-                <button className="dashboard-button" onClick={RemindClick}>Remind</button>
+                <button className="btn btn-delete">Delete</button>
+                <NavLink to={{pathname: `/edit/${subscription._id}`}} className="btn btn-remind">Edit</NavLink>
+                {remindAdded &&
+                    <button disabled className="btn" onClick={RemindClick}>{remindButtonText}</button>
+                }
+                {remindAdded == false &&
+                    <button className="btn" onClick={RemindClick}>{remindButtonText}</button>
+                }
             </div>
         </div>
 
     )
 }
-

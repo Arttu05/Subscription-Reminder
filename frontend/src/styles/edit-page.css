@@ -1,0 +1,15 @@
+.edit-form-container{
+    width: 80%;
+    max-width: 500px;
+}
+
+.edit-title{
+    text-align: center;
+}
+
+.no-data-msg{
+    text-align: center;
+    width: 100%;
+    display: block;
+}
+

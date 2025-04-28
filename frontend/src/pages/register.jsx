@@ -2,8 +2,9 @@ import axios from "axios"
 import "../styles/register.css"
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { BACKEND_URL } from "../const"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAuth } from "../context"
+import LoadingAnimation from "../Loading-animation"
 
 export default function RegisterCard(){
 
@@ -18,22 +19,38 @@ export default function RegisterCard(){
     const [matchErr, setMatchErr] = useState(false)
     const [existsErr, setExistsErr] = useState(false)
 
+    const [waitingForResponse, setWaitingForResponse] = useState(false)
+
     const {token} = useAuth()
     console.log(token)
+
+    useEffect(() => {
+        
+        if(token){
+            navigate("/dashboard")
+        }
+
+        
+    },[]) 
+
 
     function HandleSubmit(event){
         event.preventDefault()
         console.log(confirmPassword)
         console.log(password)
+
+        
         if(confirmPassword !== password){
             setMatchErr(true);
             return
         }
-
+        
+        setWaitingForResponse(true)
         axios({method: 'post', url: `${BACKEND_URL}/auth/register`, data:{username: username, password: password }})
         .then((value) => {
             console.log(value)
-
+            
+            setWaitingForResponse(false)
             if(value.status == 200){
                 // TODO redirect to login
                 console.log("200")
@@ -45,6 +62,7 @@ export default function RegisterCard(){
         })
         .catch((err) => {
             console.log(err)
+            setWaitingForResponse(false)
         })
     }
 
@@ -54,11 +72,21 @@ export default function RegisterCard(){
                 <span>Username</span>
                 <input type="text" name="username" onChange={(e) => {setUsername(e.target.value)}} />
                 <span>Password</span>
-                <input type="text" name="password" onChange={(e) => {setPassword(e.target.value)}} />
+                <input type="password" name="password" onChange={(e) => {setPassword(e.target.value)}} />
                 <span>Confirm Password</span>
-                <input type="text" name="confirmpassword" onChange={(e) => {setConfirmPassword(e.target.value)}} />
-                <button type="submit">Register</button>
+                <input type="password" name="confirmpassword" onChange={(e) => {setConfirmPassword(e.target.value)}} />
+
+                {waitingForResponse == true && 
+                    <button disabled type="submit"><LoadingAnimation /></button>
+                }
+
+                {waitingForResponse == false && 
+                    <button type="submit">Register</button>
+                }
+
             </form>
+
+
             {existsErr === true && 
                 <div className="error-message">
                     <span className="error-message-text">Username already in use</span>
