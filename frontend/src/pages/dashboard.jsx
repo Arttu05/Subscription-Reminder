@@ -36,6 +36,11 @@ export function DashboardElem(){
                 LogoutToRoot()
             }
         })
+
+        Notification.requestPermission()
+        .then(function(permission) {
+           console.log(permission)
+        });
     },[])
 
     return(
@@ -66,8 +71,8 @@ export function DashboardElem(){
                         //No subscriptions
                         <span>No Subscriptions</span>
                     }
+                    
                 </div>
-                <button className="btn btn-delete">Remove all reminders</button>
             </div>
         </>
     )
@@ -79,7 +84,16 @@ function SubscriptionCard({subscription}){
     const {token} = useAuth()
 
     const [remindButtonText, setRemindButtonText] = useState("Remind")
-    const [remindAdded, setRemindAdded] = useState(false)
+    const [disableButton, setDisableButton] = useState(false)
+    const [removeEvent, setRemoveEvent] = useState(false)
+
+
+    useEffect(() => {
+        if(subscription.notification){
+            setRemindButtonText("Remove Reminder")
+            setRemoveEvent(true)
+        }
+    },[])
 
     // https://www.npmjs.com/package/web-push
     function urlBase64ToUint8Array(base64String) {
@@ -95,35 +109,48 @@ function SubscriptionCard({subscription}){
 
         if(existingSW){
             console.log("service worker already exists")
-            return await existingSW.pushManager.getSubscription()
+            await existingSW.unregister()
         }
-        else{
-            console.log("service worker doesn't exists")
-            const register = await navigator.serviceWorker.register("/sw.js")
-            const push = await register.pushManager.subscribe({ 
-                userVisibleOnly: true,
-                applicationServerKey: urlBase64ToUint8Array(PUBLIC_KEY)
-            })
-            return push
-        }
-
+        const register = await navigator.serviceWorker.register("/sw.js")
+        const push = await register.pushManager.subscribe({ 
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(PUBLIC_KEY)
+        })
+        return push
     }
 
     async function RemindClick(event){
         //TODO subscripe to notification
+        setDisableButton(true)
         const push = await GetNotificationPush()
         console.log(push)
         axios({method: "post", url: `${BACKEND_URL}/api/notification`, data: {push: push, sub_id: subscription._id, remind_date: subscription.remind_date },  headers:{"Authorization": `Bearer ${token}` }})
         .then(res => {
-            console.log(event)
-            
-            setRemindAdded(true)
-            setRemindButtonText("Remind Added")
+            setDisableButton(false)
+            setRemoveEvent(true)
+            setRemindButtonText("Remove Reminder")
         })
         .catch(err => {
+            setDisableButton(false)
             console.log(err)
         })
-
+        
+    }
+    
+    async function RemoveReminder(event){
+        setDisableButton(true)
+        
+        axios({method: "delete", url: `${BACKEND_URL}/api/notification/${subscription._id}`, headers:{"Authorization": `Bearer ${token}` }})
+        .then((res) => {
+            console.log(res)
+            setRemoveEvent(false)
+            setRemindButtonText("Remind")
+            setDisableButton(false)
+        })
+        .catch((err) => {
+            setDisableButton(false)
+            console.log(err)
+        })
     }
 
     return(
@@ -145,16 +172,51 @@ function SubscriptionCard({subscription}){
                 }
 
             <div className="subscription-card-button-container">
-                <button className="btn btn-delete">Delete</button>
+                <DeleteSubButton sub_id={subscription._id} />
                 <NavLink to={{pathname: `/edit/${subscription._id}`}} className="btn btn-remind">Edit</NavLink>
-                {remindAdded &&
-                    <button disabled className="btn" onClick={RemindClick}>{remindButtonText}</button>
+                {removeEvent == false &&
+                    <button disabled={disableButton} className="btn" onClick={RemindClick}>{remindButtonText}</button>
                 }
-                {remindAdded == false &&
-                    <button className="btn" onClick={RemindClick}>{remindButtonText}</button>
+                {removeEvent == true &&
+                    <button disabled={disableButton} className="btn" onClick={RemoveReminder}>{remindButtonText}</button>
                 }
             </div>
         </div>
 
     )
+}
+
+function DeleteSubButton({sub_id}){
+
+    const navigate = useNavigate()
+    const {token} = useAuth()
+
+    function DeleteClick(e){
+        e.target.disabled = true
+
+        const answer = confirm("Do you want to delete this Subscription.")
+        console.log(answer)
+        if(answer == false){
+            e.target.disabled = false
+            return
+        }
+
+        axios({method: "delete", url: `${BACKEND_URL}/api/${sub_id}`,  headers:{"Authorization": `Bearer ${token}` }})
+        .then((res) => {
+            navigate("/dashboard")
+            window.location.reload()
+        })
+        .catch((err) => {
+
+        })
+
+    }
+
+
+    return(
+
+        <button onClick={DeleteClick} className="btn btn-delete">Delete</button>
+
+    )
+
 }

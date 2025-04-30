@@ -10,7 +10,8 @@ const subscriptionSchema = new mongoose.Schema({
         default: `${process.env.FRONTEND_URL}/icon.svg`,
     },
     delete_after: Boolean,
-    remind_again: Boolean
+    remind_again: Boolean,
+    notification: Boolean // if user has set reminder 
 })
 
 const subscriptionModel = new mongoose.model("subscription",subscriptionSchema)

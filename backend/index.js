@@ -43,14 +43,3 @@ const httpsOptions = {
 https.createServer(httpsOptions, app).listen(port, () => {
     console.log(`listening to port ${port}`)
 })
-
-
-
-/* app.listen(port,(err) => {
-    if(err){
-        console.log(err)
-    }
-    else{
-        console.log(`Listening port: ${port}`)
-    }
-}) */

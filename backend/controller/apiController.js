@@ -18,18 +18,11 @@ async function GetUserSubscriptions(req, res){
     
     for(const subId of foundUser.subscriptions){
         const foundSub = await subscriptionModel.findById(subId)
-    
-        usersSubscriptionList.push(foundSub) 
-    }    
-
-   /*  await foundUser.subscriptions.forEach(async subscriptionId => {
-        const foundSub = await subscriptionModel.findById(subscriptionId)
         
-        // TODO, make sure the foundsub exists and is not null
-        
-        usersSubscriptionList.push(foundSub) 
-
-    }); */
+        if(foundSub != null){
+            usersSubscriptionList.push(foundSub) 
+        }
+    }   
 
     res.status(200).json(usersSubscriptionList)
 
@@ -94,6 +87,45 @@ async function NotificationSub(req,res){
 
     await newNotification.save()
 
+    const foundSub = await subscriptionModel.findById(sub_id)
+
+    foundSub.notification = true
+
+    await foundSub.save();
+
+    res.status(200).json(true)
+
+}
+
+async function DeleteNotification(req,res){
+    const sub_id = req.params.id
+    const foundSub = await subscriptionModel.findById(sub_id)
+
+    if(foundSub == null){
+        res.status(400).json(false)
+        return;
+    }
+    
+    const foundNoti = await notificationModel.findOne({sub_id: foundSub._id})
+
+    if(foundNoti == null){
+        res.status(400).json(false)
+        return;
+    }
+    
+    
+    
+    const deleteInfo = await notificationModel.deleteOne({_id: foundNoti._id})
+    
+    if(deleteInfo.deletedCount !== 1){
+        res.status(400).json(false)   
+        return     
+    }
+    
+    foundSub.notification = false;
+
+    await foundSub.save()
+
     res.status(200).json(true)
 
 }
@@ -146,4 +178,28 @@ async function EditSubscription(req ,res){
     res.status(200).json(true)
 }
 
-module.exports = { GetUserSubscriptions, AddNewReminder, NotificationSub, GetSubscriptionById, EditSubscription}
+async function DeleteSubscriptionById(req, res){
+    const sub_id = req.params.id
+
+    const deltedSub = await subscriptionModel.deleteOne({_id: sub_id})
+
+    if(deltedSub.deletedCount !== 1){
+        res.status(400).json(false)
+        return
+    }
+    
+
+    const user = await userModel.findById(req.user_id)
+
+    const listWithoutDeletedId = user.subscriptions.filter((id) => {
+        return id !== sub_id
+    })
+
+    user.subscriptions = listWithoutDeletedId
+
+    await user.save()
+    
+    res.status(200).json(true)
+}
+
+module.exports = { GetUserSubscriptions, AddNewReminder, NotificationSub, DeleteNotification , GetSubscriptionById, EditSubscription, DeleteSubscriptionById}
