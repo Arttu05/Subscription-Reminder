@@ -18,9 +18,25 @@ export function DashboardElem(){
         navigate("/")
     }
 
+    const [supportsPush, setSupportsPush] = useState(false)
+
     //TODO: this makes 2 requests for some reason.
      
     useEffect(() => {
+
+        if ('PushManager' in window) {
+
+            setSupportsPush(true)
+            
+            Notification.requestPermission()
+            .then(function(permission) {
+                console.log(permission)
+            });
+        } 
+        else {
+            setSupportsPush(false)
+        }
+
         console.log(token)
         axios({ method: "get", url: `${BACKEND_URL}/api/subscriptions`, headers:{"Authorization": `Bearer ${token}` }})
         .then((response) => {
@@ -37,10 +53,6 @@ export function DashboardElem(){
             }
         })
 
-        Notification.requestPermission()
-        .then(function(permission) {
-           console.log(permission)
-        });
     },[])
 
     return(
@@ -61,9 +73,9 @@ export function DashboardElem(){
                     {dataFetched == false &&
                         //still fetching data 
                         <div class="loader-container">
-                            <div class="loading-dot"></div>
-                            <div class="loading-dot"></div>
-                            <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
                         </div>
                     }
 
@@ -72,6 +84,10 @@ export function DashboardElem(){
                         <span>No Subscriptions</span>
                     }
                     
+                    {supportsPush == false &&
+                        <span>This browser doesn't support push notifications</span>
+                    }
+
                 </div>
             </div>
         </>
@@ -105,24 +121,37 @@ function SubscriptionCard({subscription}){
 
     async function GetNotificationPush(){ // push contains the enpoint and other stuff that is needed to send notification
 
-        const existingSW = await navigator.serviceWorker.getRegistration("/sw.js")
-
-        if(existingSW){
-            console.log("service worker already exists")
-            await existingSW.unregister()
+        try{
+            const existingSW = await navigator.serviceWorker.getRegistration("/sw.js")
+    
+            if(existingSW){
+                console.log("service worker already exists")
+                await existingSW.unregister()
+            }
+            const register = await navigator.serviceWorker.register("/sw.js")
+            const push = await register.pushManager.subscribe({ 
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(PUBLIC_KEY)
+            })
+            return push
         }
-        const register = await navigator.serviceWorker.register("/sw.js")
-        const push = await register.pushManager.subscribe({ 
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(PUBLIC_KEY)
-        })
-        return push
+        catch(err){
+            console.log(err)
+            setDisableButton(true)
+            setRemindButtonText("SSL Err")
+            return null
+        }
     }
 
     async function RemindClick(event){
         //TODO subscripe to notification
         setDisableButton(true)
         const push = await GetNotificationPush()
+
+        if(push == null){
+            return;
+        }
+
         console.log(push)
         axios({method: "post", url: `${BACKEND_URL}/api/notification`, data: {push: push, sub_id: subscription._id, remind_date: subscription.remind_date },  headers:{"Authorization": `Bearer ${token}` }})
         .then(res => {

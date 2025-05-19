@@ -30,7 +30,7 @@ mongoose.connect(process.env.MONGO_URL).then(() =>{
 app.use("/api", apiRouter)
 app.use("/auth", authRouter)
 
-
+// Used for self signed ssl.
 app.get("/", (req,res) => res.redirect(process.env.FRONTEND_URL))
 
 

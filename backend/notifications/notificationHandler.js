@@ -22,7 +22,6 @@ async function notificationHandler(){
 
         const currentTime = new Date().getTime()
         if(notification.date <= currentTime){
-            //TODO send notification
 
             //gets the subscription, that contains the title, message, etc.
             const notificationSub = await subscriptionModel.findById(notification.sub_id)
