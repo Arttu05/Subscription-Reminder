@@ -1,6 +1,6 @@
 # Subscription-Reminder
 
-<img src="assets/icon.png"  width="500" height="500">
+<img src="assets/icon.png"  width="300" height="300">
 
 a Complete website, that uses push notifications to remind of subscriptions. Backend is made with nodejs, web-push and express. Frontend works with vite, react and react-router-dom 
 
