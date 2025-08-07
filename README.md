@@ -2,14 +2,24 @@
 
 <img src="assets/icon.png"  width="300" height="300">
 
-a Complete website, that uses push notifications to remind of subscriptions. Backend is made with nodejs, web-push and express. Frontend works with vite, react and react-router-dom 
+**Made as a degree work for a couse.**
 
+a Complete website, that uses push notifications to remind users of their subscriptions. Users add their subscriptions to the website and then can choose which subscriptions they want to be reminded of. push notification is send to the device that pressed the "remind" button.
+
+Backend is made with nodejs, web-push and express. Frontend works with vite, react and react-router-dom. 
+
+## Features
+
+- jwt login system
+- push notifications
+- responsive UI
+- REST API
 
 ## Important
 
 **chrome(browser) doesn't let you send push notifications with self signed ssl, so to test this project use browser like firefox that let's you send push notifications with self signed ssl.**
 
-The "unixtimestamps" in this project are in milliseconds, instead of in seconds.
+The "unixtimestamps" in this project are in milliseconds.
 
 Push notifications require SSL and if you're using self signed certificate, you will first need to go to the root route of backend, Example ```https://192.168.100.33:5001/```. This is just a route that will redirect you to the frontend. When first time accessing this route it will ask to allow "unsecure" connection or something similar, because the ssl is self signed. If you directly go to the frontend, the frontend most likely can't access the backend, because it uses self-signed ssl. So by connecting to the backend and allowing the "unsecure" connection, now the frontend should be able to fetch data from the backend. 
 
