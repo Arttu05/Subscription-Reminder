@@ -2,9 +2,9 @@
 
 <img src="assets/icon.png"  width="300" height="300">
 
-**Made as a degree work for a couse.**
+**Made as a degree work for a course.**
 
-a Complete website, that uses push notifications to remind users of their subscriptions. Users add their subscriptions to the website and then can choose which subscriptions they want to be reminded of. push notification is send to the device that pressed the "remind" button.
+a Complete website, that uses push notifications to remind users of their subscriptions. Users add their subscriptions to the website and then can choose which subscriptions they want to be reminded of. push notification is send to the device where "remind" button is pressed.
 
 Backend is made with nodejs, web-push and express. Frontend works with vite, react and react-router-dom. 
 
@@ -21,9 +21,9 @@ Backend is made with nodejs, web-push and express. Frontend works with vite, rea
 
 The "unixtimestamps" in this project are in milliseconds.
 
-Push notifications require SSL and if you're using self signed certificate, you will first need to go to the root route of backend, Example ```https://192.168.100.33:5001/```. This is just a route that will redirect you to the frontend. When first time accessing this route it will ask to allow "unsecure" connection or something similar, because the ssl is self signed. If you directly go to the frontend, the frontend most likely can't access the backend, because it uses self-signed ssl. So by connecting to the backend and allowing the "unsecure" connection, now the frontend should be able to fetch data from the backend. 
+Push notifications require SSL and if you're using self signed certificate, you will first need to go to the root route of backend, Example ```https://192.168.100.33:5001/```. This is just a route that will redirect you to the frontend. When first time accessing this route it will ask to allow "unsecure" connection or something similar, because the ssl is self signed. If you directly go to the frontend, the frontend most likely can't access the backend, because the "unsecure" connection has not been allowed. So by connecting to the backend and allowing the "unsecure" connection, now the frontend should be able communicate with the backend. 
 
-For now both backend and frontend use the same ssl, for better security you should use different keys to both.
+For now both backend and frontend use the same ssl, but for better security you should use different keys for both, backend and frontend.
 
 
 ## screenshots
@@ -32,7 +32,7 @@ Dashboard view
 
 ![dashboard](assets/dashboard.png)
 
-Push notification send by the application
+Push notification send by the website
 
 ![push notification](assets/notification.png)
 
@@ -43,7 +43,7 @@ API documentation in ```/backend/README.md```
 
 ## How to run/test
 
-1. run the following command in the root folder of this project ```openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout private.key -out certificate.crt```. This creates the self signed SSL, that push notifications require.
+1. run the following command in the root folder of this project ```openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout private.key -out certificate.crt```. This creates the self signed SSL, that push notifications require. This command also requires ```openssl```, to be installed
 
 2. Create ```.env``` file to ```/backend```. Example of ```.env``` can be found from ```/backend/example.env```. 
 
