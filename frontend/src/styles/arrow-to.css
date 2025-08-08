@@ -1,0 +1,21 @@
+.arrow-to{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    background-color: gold;
+    color: white;
+    font-weight: 600;
+    text-decoration: transparent;
+    padding: 5px 10px;
+    width: fit-content;
+    border-radius: 5px;
+}
+
+.arrow {
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent; /* Left side of the triangle */
+    border-right: 25px solid white; /* Right side of the triangle */
+    border-bottom: 10px solid transparent; /* Color of the triangle */
+}

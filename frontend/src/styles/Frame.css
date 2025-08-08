@@ -1,0 +1,172 @@
+body, html, #root {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100svh;
+}
+
+header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #131313;
+}
+
+.header-left-side{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 5px;
+}
+
+.header-icon{
+    height: 30px;
+}
+
+.header-site-name{
+    display: none;
+}
+
+.auth-container{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    gap: 2px;
+    padding-top: 5px;
+}
+
+.auth-button{
+    color: white;
+    background-color: #131313 ;
+    padding: 10px 25px;
+    border-right: 3px solid white;
+    border-bottom: 3px solid white;
+    border-left: none;
+    border-top: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    opacity: 100%;
+    text-decoration: transparent;    
+}
+
+.auth-button:hover{
+    transition: transform 250ms;
+    transform:translate(-3px,-3px);
+}
+
+.hide-button{
+    display: none;
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* General button */
+
+.btn{
+    border: transparent;
+    color: white;
+    font-weight: 600;
+    background-color: gold;
+    font-size: 1.2em;
+    border-radius: 10px;
+    padding: 5px 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    text-decoration: transparent
+}
+
+.btn:hover{
+    opacity: 80%;
+}
+
+.btn:active{
+    transition: 200ms scale;
+    scale: 1.05;
+}
+
+.btn:focus{
+    transition: 200ms scale;
+    scale: 1.05;
+}
+
+.btn:disabled{
+    scale: 1;
+    filter: brightness(80%);
+}
+
+
+.btn-delete{
+    background-color: red;
+}
+
+/* general form styles */
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: start;
+    padding: 10px;
+    gap: 10px;
+}
+
+form span{
+    font-size: 1.2em;
+    text-align: left;
+}
+
+form button{
+    background-color: gold;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+form button:disabled{
+    filter: grayscale(75%) !important; 
+}
+
+form button:hover{
+    filter:brightness(75%);
+}
+
+form input{
+    font-size: 1.2rem;
+}
+
+form textarea{
+    font-size: 1.2rem;
+    height: 7rem;
+}
+
+
+/* error message styles  */
+
+.error-message{
+    background-color: red;
+    padding: 10px;
+    border-radius: 5%;
+}
+
+.error-message-text{
+    font-weight: 600;
+    color: black;
+}
+
+
+
+@media screen and (min-width: 500px) {
+    
+    .header-site-name{
+        display: inline;
+        color: white;
+        font-weight: 600;
+    }
+
+}
